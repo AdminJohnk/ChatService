@@ -38,7 +38,6 @@ class ChatService {
       const newMessage = await MessageClass.createMessage({
         conversation_id: conversationID,
         sender: sender._id,
-        seen: [sender._id],
         content,
         createdAt
       });

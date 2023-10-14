@@ -12,7 +12,6 @@ var MessageSchema = new Schema(
     conversation_id: { type: String, ref: 'Conversation', required: true },
     sender: { type: ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
-    seen: { type: [ObjectId], ref: 'User', default: [] },
     createdAt: { type: Date, required: true }
   },
   {
