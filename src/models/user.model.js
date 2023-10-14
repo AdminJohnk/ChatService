@@ -1,10 +1,8 @@
 'use strict';
 
 const { model, Schema, Types } = require('mongoose');
-const { unGetSelectData, getSelectData } = require('../utils/functions');
 const { avt_default, se_UserDefault, RoleUser } = require('../utils/constants');
 const ObjectId = Types.ObjectId;
-const { UserIncrClass } = require('./user_incr.model');
 
 const DOCUMENT_NAME = 'User';
 const COLLECTION_NAME = 'users';
@@ -93,24 +91,9 @@ var UserSchema = new Schema(
 //   }
 // });
 
-UserSchema.pre('save', async function (next) {
-  const userIncr = await UserIncrClass.getIdCurrent();
-  if (userIncr.id_delete.length) {
-    this.id_incr = userIncr.id_delete.at(-1);
-    await UserIncrClass.pullIdDelete();
-  } else {
-    this.id_incr = userIncr.id_current + 1;
-    await UserIncrClass.setIncrId(this.id_incr);
-  }
-
-  next();
-});
-
 const UserModel = model(DOCUMENT_NAME, UserSchema);
 
-
 class UserClass {
-  
   static async checkExist(select) {
     return await UserModel.findOne(select).lean();
   }
