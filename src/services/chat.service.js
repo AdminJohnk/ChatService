@@ -4,6 +4,7 @@ const { pp_UserDefault } = require('../utils/constants');
 
 const PRIVATE_MSG = 'PRIVATE_MSG';
 const SEEN_MSG = 'SEEN_MSG';
+const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
 
 class ChatService {
   constructor(io) {
@@ -42,11 +43,14 @@ class ChatService {
         createdAt
       });
       // add lastMessage to conversation
-      await ConversationClass.updateLastMessage({
+      const result = await ConversationClass.updateLastMessage({
         conversation_id: conversationID,
         message_id: newMessage._id
       });
       io.emit(PRIVATE_MSG + conversationID, message);
+      result.members.forEach((member) => {
+        io.emit(PRIVATE_CONVERSATION + member.toString(), result);
+      });
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -60,8 +64,7 @@ class ChatService {
         conversation_id: conversationID,
         user_id: userID
       });
-      const seen = await result.populate('seen', pp_UserDefault);
-      io.emit(SEEN_MSG + conversationID, seen);
+      io.emit(SEEN_MSG + conversationID, result);
     } catch (error) {
       console.log(error);
       throw new Error(error);
