@@ -12,7 +12,7 @@ class ChatService {
       let chatService = io.of('/chat-service');
 
       chatService.on('connection', (socket) => {
-        console.log('A user chat connected');
+        console.log(`A user with ${socket.id} connected to chat service`);
 
         socket.on(PRIVATE_MSG, (data) => {
           this.getPrivateMessage({ io: chatService, data });

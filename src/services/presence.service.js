@@ -9,17 +9,17 @@ class PresenceService {
 
       console.log('presenceService');
 
-      presenceService.on('connection', socket => {
-        console.log('A user presence connected');
+      presenceService.on('connection', (socket) => {
+        console.log(`A user with ${socket.id} connected to presence service`);
 
-        socket.on(SET_PRESENCE, userID => {
-          if (this.activeArr.findIndex(user => user.userID === userID) === -1) {
+        socket.on(SET_PRESENCE, (userID) => {
+          if (this.activeArr.findIndex((user) => user.userID === userID) === -1) {
             this.activeArr.push({
               userID,
               socketID: socket.id
             });
-            
-            const activeArr = this.activeArr.map(user => user.userID);
+
+            const activeArr = this.activeArr.map((user) => user.userID);
 
             presenceService.emit(SET_ACTIVE_MEM, activeArr);
           }
@@ -28,11 +28,9 @@ class PresenceService {
         socket.on('disconnect', () => {
           console.log('A user presence disconnected');
 
-          this.activeArr = this.activeArr.filter(
-            user => user.socketID !== socket.id
-          );
+          this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 
-          const activeArr = this.activeArr.map(user => user.userID);
+          const activeArr = this.activeArr.map((user) => user.userID);
 
           presenceService.emit(SET_ACTIVE_MEM, activeArr);
         });
