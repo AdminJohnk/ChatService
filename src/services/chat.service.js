@@ -23,7 +23,7 @@ class ChatService {
         });
 
         socket.on('disconnect', () => {
-          console.log('A user chat disconnected');
+          console.log(`A user with ${socket.id} disconnected from chat service`);
         });
       });
     } catch (error) {

@@ -26,7 +26,7 @@ class PresenceService {
         });
 
         socket.on('disconnect', () => {
-          console.log('A user presence disconnected');
+          console.log(`A user with ${socket.id} disconnected from presence service`);
 
           this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 
