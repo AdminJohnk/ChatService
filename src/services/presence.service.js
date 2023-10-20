@@ -7,8 +7,6 @@ class PresenceService {
     try {
       let presenceService = io.of('/presence-service');
 
-      console.log('presenceService');
-
       presenceService.on('connection', (socket) => {
         console.log(`A user with ${socket.id} connected to presence service`);
 
