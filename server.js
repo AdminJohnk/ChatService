@@ -7,6 +7,9 @@ const ChatService = require('./src/services/chat.service');
 const PresenceService = require('./src/services/presence.service');
 
 const app = express();
+app.get('/', (_, res) => {
+  res.send('Hello World!');
+});
 const server = require('http').createServer(app);
 
 const io = new Server(server, {
