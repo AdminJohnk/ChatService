@@ -5,6 +5,7 @@ const { pp_UserDefault } = require('../utils/constants');
 const PRIVATE_MSG = 'PRIVATE_MSG';
 const SEEN_MSG = 'SEEN_MSG';
 const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
+const NEW_CONVERSATION = 'NEW_CONVERSATION';
 
 class ChatService {
   constructor(io) {
@@ -20,6 +21,12 @@ class ChatService {
 
         socket.on(SEEN_MSG, (data) => {
           this.seenMessage({ io: chatService, data });
+        });
+
+        socket.on(NEW_CONVERSATION, (data) => {
+          data.members.forEach((member) => {
+            chatService.emit(PRIVATE_CONVERSATION + member.toString(), data);
+          });
         });
 
         socket.on('disconnect', () => {
