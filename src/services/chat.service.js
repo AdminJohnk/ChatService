@@ -25,7 +25,7 @@ class ChatService {
 
         socket.on(NEW_CONVERSATION, (data) => {
           data.members.forEach((member) => {
-            chatService.emit(PRIVATE_CONVERSATION + member.toString(), data);
+            chatService.emit(PRIVATE_CONVERSATION + member._id.toString(), data);
           });
         });
 
