@@ -48,7 +48,7 @@ class ConversationClass {
     return await ConversationModel.findByIdAndUpdate(
       conversation_id,
       { $addToSet: { seen: user_id } },
-      { new: true }
+      { new: true, timestamps: false }
     ).populate('seen', pp_UserDefault);
   }
 }
