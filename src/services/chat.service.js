@@ -6,6 +6,8 @@ const PRIVATE_MSG = 'PRIVATE_MSG';
 const SEEN_MSG = 'SEEN_MSG';
 const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
 const NEW_CONVERSATION = 'NEW_CONVERSATION';
+const IS_TYPING = 'IS_TYPING';
+const STOP_TYPING = 'STOP_TYPING';
 
 class ChatService {
   constructor(io) {
@@ -27,6 +29,14 @@ class ChatService {
           data.members.forEach((member) => {
             chatService.emit(PRIVATE_CONVERSATION + member._id.toString(), data);
           });
+        });
+
+        socket.on(IS_TYPING, (data) => {
+          this.isTyping({ io: chatService, data });
+        });
+
+        socket.on(STOP_TYPING, (data) => {
+          this.stopTyping({ io: chatService, data });
         });
 
         socket.on('disconnect', () => {
@@ -72,6 +82,27 @@ class ChatService {
         user_id: userID
       });
       io.emit(SEEN_MSG + conversationID, result);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async isTyping({ io, data }) {
+    const { conversationID, userID } = data;
+    try {
+      io.emit(IS_TYPING + conversationID, userID);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async stopTyping({ io, data }) {
+    const { conversationID, userID } = data;
+    console.log('stopTyping', conversationID, userID);
+    try {
+      io.emit(STOP_TYPING + conversationID, userID);
     } catch (error) {
       console.log(error);
       throw new Error(error);
