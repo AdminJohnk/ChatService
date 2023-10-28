@@ -100,7 +100,6 @@ class ChatService {
 
   async stopTyping({ io, data }) {
     const { conversationID, userID } = data;
-    console.log('stopTyping', conversationID, userID);
     try {
       io.emit(STOP_TYPING + conversationID, userID);
     } catch (error) {

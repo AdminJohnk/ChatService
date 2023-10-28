@@ -1,9 +1,12 @@
+const { default: checkConnect } = require('../utils/checkConnect');
+
 const SET_PRESENCE = 'SET_PRESENCE';
 const SET_ACTIVE_MEM = 'SET_ACTIVE_MEM';
 
 class PresenceService {
   activeArr = [];
   constructor(io) {
+    checkConnect(this.activeArr);
     try {
       let presenceService = io.of('/presence-service');
 
