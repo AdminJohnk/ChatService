@@ -6,9 +6,11 @@ const SET_ACTIVE_MEM = 'SET_ACTIVE_MEM';
 class PresenceService {
   activeArr = [];
   constructor(io) {
-    checkConnect(this.activeArr);
     try {
       let presenceService = io.of('/presence-service');
+      setInterval(() => {
+        console.log('Number of active users: ', this.activeArr.length);
+      }, 5000);
 
       presenceService.on('connection', (socket) => {
         console.log(`A user with ${socket.id} connected to presence service`);
