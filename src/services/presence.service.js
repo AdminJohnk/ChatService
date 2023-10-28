@@ -1,5 +1,3 @@
-const checkConnect = require('../utils/checkConnect');
-
 const SET_PRESENCE = 'SET_PRESENCE';
 const SET_ACTIVE_MEM = 'SET_ACTIVE_MEM';
 
