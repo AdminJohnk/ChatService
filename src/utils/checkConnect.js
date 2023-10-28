@@ -4,4 +4,4 @@ const checkConnect = (activeArr) => {
   }, 5000);
 };
 
-export default checkConnect;
+module.exports = checkConnect;
