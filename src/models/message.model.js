@@ -9,7 +9,7 @@ const COLLECTION_NAME = 'messages';
 
 var MessageSchema = new Schema(
   {
-    conversation_id: { type: String, ref: 'Conversation', required: true },
+    conversation_id: { type: ObjectId, ref: 'Conversation', required: true },
     sender: { type: ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, required: true }
