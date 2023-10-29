@@ -4,10 +4,12 @@ const { pp_UserDefault } = require('../utils/constants');
 
 const PRIVATE_MSG = 'PRIVATE_MSG';
 const SEEN_MSG = 'SEEN_MSG';
+const UNSEEN_MSG = 'UNSEEN_MSG';
 const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
 const NEW_CONVERSATION = 'NEW_CONVERSATION';
 const IS_TYPING = 'IS_TYPING';
 const STOP_TYPING = 'STOP_TYPING';
+const LEAVE_GROUP = 'LEAVE_GROUP';
 
 class ChatService {
   constructor(io) {
@@ -25,6 +27,10 @@ class ChatService {
           this.seenMessage({ io: chatService, data });
         });
 
+        socket.on(UNSEEN_MSG, (data) => {
+          this.unseenMessage({ io: chatService, data });
+        });
+
         socket.on(NEW_CONVERSATION, (data) => {
           data.members.forEach((member) => {
             chatService.emit(PRIVATE_CONVERSATION + member._id.toString(), data);
@@ -37,6 +43,12 @@ class ChatService {
 
         socket.on(STOP_TYPING, (data) => {
           this.stopTyping({ io: chatService, data });
+        });
+
+        socket.on(LEAVE_GROUP, (data) => {
+          data.members.forEach((member) => {
+            chatService.emit(LEAVE_GROUP + member._id.toString(), data);
+          });
         });
 
         socket.on('disconnect', () => {
@@ -78,6 +90,20 @@ class ChatService {
     const { conversationID, userID } = data;
     try {
       const result = await ConversationClass.seenMessage({
+        conversation_id: conversationID,
+        user_id: userID
+      });
+      io.emit(SEEN_MSG + conversationID, result);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
+  async unseenMessage({ io, data }) {
+    const { conversationID, userID } = data;
+    try {
+      const result = await ConversationClass.unseenMessage({
         conversation_id: conversationID,
         user_id: userID
       });

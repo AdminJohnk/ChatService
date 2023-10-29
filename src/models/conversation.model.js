@@ -20,9 +20,9 @@ const ConversationSchema = new Schema(
     // private
 
     // group
-    author: { type: ObjectId, ref: 'User' },
+    admins: { type: [ObjectId], ref: 'User', default: [] },
     name: { type: String },
-    image: { type: String, default: avt_default }
+    image: { type: ObjectId, ref: 'Image', default: null }
   },
   {
     timestamps: true,
@@ -48,6 +48,13 @@ class ConversationClass {
     return await ConversationModel.findByIdAndUpdate(
       conversation_id,
       { $addToSet: { seen: user_id } },
+      { new: true, timestamps: false }
+    ).populate('seen', pp_UserDefault);
+  }
+  static async unseenMessage({ conversation_id, user_id }) {
+    return await ConversationModel.findByIdAndUpdate(
+      conversation_id,
+      { $pull: { seen: user_id } },
       { new: true, timestamps: false }
     ).populate('seen', pp_UserDefault);
   }

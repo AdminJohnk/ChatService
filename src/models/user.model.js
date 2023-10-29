@@ -32,7 +32,7 @@ var UserSchema = new Schema(
     cover_image: String,
     verified: { type: Boolean, default: false },
     tags: [{ type: String }],
-    alias: String,
+    alias: { type: String, unique: true, trim: true, default: '' },
     about: String,
     experiences: { type: Array, default: [] },
     /* 
@@ -71,10 +71,11 @@ var UserSchema = new Schema(
       default: []
     },
 
-    // Number behavior
+    // Number
     follower_number: { type: Number, default: 0 },
     following_number: { type: Number, default: 0 },
-    post_number: { type: Number, default: 0 }
+    post_number: { type: Number, default: 0 },
+    community_number: { type: Number, default: 0 }
   },
   {
     timestamps: true,
