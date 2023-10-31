@@ -24,6 +24,7 @@ var UserSchema = new Schema(
     },
     password: { type: String, required: true },
     role: Array,
+    last_online: { type: Date, default: Date.now },
 
     // ==================================================
 
@@ -97,6 +98,9 @@ const UserModel = model(DOCUMENT_NAME, UserSchema);
 class UserClass {
   static async checkExist(select) {
     return await UserModel.findOne(select).lean();
+  }
+  static async updateLastOnline({ user_id }) {
+    return await UserModel.findByIdAndUpdate(user_id, { last_online: Date.now() });
   }
 }
 

@@ -10,6 +10,11 @@ const COLLECTION_NAME = 'messages';
 var MessageSchema = new Schema(
   {
     conversation_id: { type: ObjectId, ref: 'Conversation', required: true },
+    type: {
+      type: String,
+      enum: ['text', 'notification', 'audio', 'file'],
+      default: 'text'
+    },
     sender: { type: ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, required: true }

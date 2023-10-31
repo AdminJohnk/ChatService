@@ -21,8 +21,8 @@ const ConversationSchema = new Schema(
 
     // group
     admins: { type: [ObjectId], ref: 'User', default: [] },
-    name: { type: String },
-    image: { type: ObjectId, ref: 'Image', default: null }
+    name: String,
+    image: String
   },
   {
     timestamps: true,

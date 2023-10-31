@@ -1,3 +1,5 @@
+const { UserClass } = require('../models/user.model');
+
 const SET_PRESENCE = 'SET_PRESENCE';
 const SET_ACTIVE_MEM = 'SET_ACTIVE_MEM';
 
@@ -26,8 +28,12 @@ class PresenceService {
           }
         });
 
-        socket.on('disconnect', () => {
+        socket.on('disconnect', async () => {
           console.log(`A user with ${socket.id} disconnected from presence service`);
+
+          const user = this.activeArr.find((user) => user.socketID === socket.id);
+
+          await UserClass.updateLastOnline(user.userID);
 
           this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 
