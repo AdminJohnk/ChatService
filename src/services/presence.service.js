@@ -32,8 +32,9 @@ class PresenceService {
           console.log(`A user with ${socket.id} disconnected from presence service`);
 
           const user = this.activeArr.find((user) => user.socketID === socket.id);
+          console.log(user)
 
-          await UserClass.updateLastOnline(user.userID);
+          await UserClass.updateLastOnline(user?.userID);
 
           this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 

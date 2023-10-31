@@ -99,7 +99,7 @@ class UserClass {
   static async checkExist(select) {
     return await UserModel.findOne(select).lean();
   }
-  static async updateLastOnline({ user_id }) {
+  static async updateLastOnline(user_id) {
     return await UserModel.findByIdAndUpdate(user_id, { last_online: Date.now() });
   }
 }
