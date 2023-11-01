@@ -21,18 +21,17 @@ class PresenceService {
               userID,
               socketID: socket.id
             });
-
-            const activeArr = this.activeArr.map((user) => user.userID);
-
-            presenceService.emit(SET_ACTIVE_MEM, activeArr);
           }
+          const activeArr = this.activeArr.map((user) => user.userID);
+
+          presenceService.emit(SET_ACTIVE_MEM, activeArr);
         });
 
         socket.on('disconnect', async () => {
           console.log(`A user with ${socket.id} disconnected from presence service`);
 
           const user = this.activeArr.find((user) => user.socketID === socket.id);
-          console.log(user)
+          console.log(user);
 
           await UserClass.updateLastOnline(user?.userID);
 
