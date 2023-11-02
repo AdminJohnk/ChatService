@@ -1,7 +1,7 @@
 const { MessageClass } = require('../models/message.model');
 const { ConversationClass } = require('../models/conversation.model');
-const { pp_UserDefault } = require('../utils/constants');
 
+const SETUP = 'SETUP';
 const PRIVATE_MSG = 'PRIVATE_MSG';
 const SEEN_MSG = 'SEEN_MSG';
 const UNSEEN_MSG = 'UNSEEN_MSG';
@@ -17,6 +17,11 @@ class ChatService {
       let chatService = io.of('/chat-service');
 
       chatService.on('connection', (socket) => {
+        socket.on(SETUP, (userID) => {
+          console.log(`A user with ID:${userID} has connected to chat service`);
+          socket.join(userID);
+        });
+
         socket.on(PRIVATE_MSG, (data) => {
           this.getPrivateMessage({ io: chatService, data });
         });
@@ -31,7 +36,7 @@ class ChatService {
 
         socket.on(NEW_CONVERSATION, (data) => {
           data.members.forEach((member) => {
-            chatService.emit(PRIVATE_CONVERSATION + member._id.toString(), data);
+            chatService.to(member._id.toString()).emit(PRIVATE_CONVERSATION, data);
           });
         });
 
@@ -45,7 +50,7 @@ class ChatService {
 
         socket.on(LEAVE_GROUP, (data) => {
           data.members.forEach((member) => {
-            chatService.emit(LEAVE_GROUP + member._id.toString(), data);
+            chatService.to(member._id.toString()).emit(LEAVE_GROUP, data);
           });
         });
       });
@@ -70,9 +75,9 @@ class ChatService {
         conversation_id: conversationID,
         message_id: newMessage._id
       });
-      io.emit(PRIVATE_MSG + conversationID, message);
       result.members.forEach((member) => {
-        io.emit(PRIVATE_CONVERSATION + member.toString(), result);
+        io.to(member.toString()).emit(PRIVATE_MSG, message);
+        io.to(member.toString()).emit(PRIVATE_CONVERSATION, result);
       });
     } catch (error) {
       console.log(error);
@@ -87,7 +92,9 @@ class ChatService {
         conversation_id: conversationID,
         user_id: userID
       });
-      io.emit(SEEN_MSG + conversationID, result);
+      result.members.forEach((member) => {
+        io.to(member.toString()).emit(SEEN_MSG, result);
+      });
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -101,7 +108,9 @@ class ChatService {
         conversation_id: conversationID,
         user_id: userID
       });
-      io.emit(SEEN_MSG + conversationID, result);
+      result.members.forEach((member) => {
+        io.to(member.toString()).emit(SEEN_MSG, result);
+      });
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -111,7 +120,7 @@ class ChatService {
   async isTyping({ io, data }) {
     const { conversationID, userID } = data;
     try {
-      io.emit(IS_TYPING + conversationID, userID);
+      io.to(userID).emit(IS_TYPING + conversationID, userID);
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -121,7 +130,7 @@ class ChatService {
   async stopTyping({ io, data }) {
     const { conversationID, userID } = data;
     try {
-      io.emit(STOP_TYPING + conversationID, userID);
+      io.to(userID).emit(STOP_TYPING + conversationID, userID);
     } catch (error) {
       console.log(error);
       throw new Error(error);

@@ -32,13 +32,13 @@ class PresenceService {
           if (!user) return;
           console.log(`A user with ID:${user.userID} has disconnected from presence service`);
 
-          await UserClass.updateLastOnline(user.userID);
-
           this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 
           const activeArr = this.activeArr.map((user) => user.userID);
 
           presenceService.emit(SET_ACTIVE_MEM, activeArr);
+
+          await UserClass.updateLastOnline(user.userID);
         });
       });
     } catch (error) {

@@ -1,7 +1,6 @@
 'use strict';
 
 const { model, Schema, Types } = require('mongoose');
-const { pp_UserDefault } = require('../utils/constants');
 const ObjectId = Types.ObjectId;
 
 const DOCUMENT_NAME = 'Message';

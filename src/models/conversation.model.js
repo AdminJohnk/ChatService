@@ -7,7 +7,7 @@ const ObjectId = Types.ObjectId;
 const DOCUMENT_NAME = 'Conversation';
 const COLLECTION_NAME = 'conversations';
 
-const { avt_default, pp_UserDefault } = require('../utils/constants');
+const { pp_UserDefault } = require('../utils/constants');
 
 const ConversationSchema = new Schema(
   {
@@ -37,26 +37,29 @@ class ConversationClass {
     return await ConversationModel.findOne(select).lean();
   }
   static async updateLastMessage({ conversation_id, message_id }) {
-    await ConversationModel.findByIdAndUpdate(conversation_id, { seen: [] });
     return await ConversationModel.findByIdAndUpdate(
       conversation_id,
-      { lastMessage: message_id },
+      { lastMessage: message_id, seen: [] },
       { new: true }
-    );
+    ).lean();
   }
   static async seenMessage({ conversation_id, user_id }) {
     return await ConversationModel.findByIdAndUpdate(
       conversation_id,
       { $addToSet: { seen: user_id } },
       { new: true, timestamps: false }
-    ).populate('seen', pp_UserDefault);
+    )
+      .populate('seen', pp_UserDefault)
+      .lean();
   }
   static async unseenMessage({ conversation_id, user_id }) {
     return await ConversationModel.findByIdAndUpdate(
       conversation_id,
       { $pull: { seen: user_id } },
       { new: true, timestamps: false }
-    ).populate('seen', pp_UserDefault);
+    )
+      .populate('seen', pp_UserDefault)
+      .lean();
   }
 }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const { model, Schema, Types } = require('mongoose');
-const { avt_default, se_UserDefault, RoleUser } = require('../utils/constants');
+const { avt_default } = require('../utils/constants');
 const ObjectId = Types.ObjectId;
 
 const DOCUMENT_NAME = 'User';
@@ -106,7 +106,6 @@ class UserClass {
 
 //Export the model
 module.exports = {
-  RoleUser,
   UserClass,
   UserModel
 };
