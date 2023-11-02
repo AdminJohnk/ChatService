@@ -36,7 +36,7 @@ class ChatService {
 
         socket.on(NEW_CONVERSATION, (data) => {
           data.members.forEach((member) => {
-            chatService.to(member._id.toString()).emit(PRIVATE_CONVERSATION, data);
+            chatService.to(member.toString()).emit(PRIVATE_CONVERSATION, data);
           });
         });
 
@@ -50,7 +50,7 @@ class ChatService {
 
         socket.on(LEAVE_GROUP, (data) => {
           data.members.forEach((member) => {
-            chatService.to(member._id.toString()).emit(LEAVE_GROUP, data);
+            chatService.to(member.toString()).emit(LEAVE_GROUP, data);
           });
         });
       });
