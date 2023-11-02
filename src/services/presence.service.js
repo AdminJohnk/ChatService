@@ -13,14 +13,13 @@ class PresenceService {
       }, 5000);
 
       presenceService.on('connection', (socket) => {
-        console.log(`A user with ${socket.id} connected to presence service`);
-
         socket.on(SET_PRESENCE, (userID) => {
           if (this.activeArr.findIndex((user) => user.userID === userID) === -1) {
             this.activeArr.push({
               userID,
               socketID: socket.id
             });
+            console.log(`A user with ID:${userID} has connected to presence service`);
           }
           const activeArr = this.activeArr.map((user) => user.userID);
 
@@ -28,12 +27,12 @@ class PresenceService {
         });
 
         socket.on('disconnect', async () => {
-          console.log(`A user with ${socket.id} disconnected from presence service`);
-
           const user = this.activeArr.find((user) => user.socketID === socket.id);
-          console.log(user);
 
-          await UserClass.updateLastOnline(user?.userID);
+          if (!user) return;
+          console.log(`A user with ID:${user.userID} has disconnected from presence service`);
+
+          await UserClass.updateLastOnline(user.userID);
 
           this.activeArr = this.activeArr.filter((user) => user.socketID !== socket.id);
 

@@ -17,8 +17,6 @@ class ChatService {
       let chatService = io.of('/chat-service');
 
       chatService.on('connection', (socket) => {
-        console.log(`A user with ${socket.id} connected to chat service`);
-
         socket.on(PRIVATE_MSG, (data) => {
           this.getPrivateMessage({ io: chatService, data });
         });
@@ -49,10 +47,6 @@ class ChatService {
           data.members.forEach((member) => {
             chatService.emit(LEAVE_GROUP + member._id.toString(), data);
           });
-        });
-
-        socket.on('disconnect', () => {
-          console.log(`A user with ${socket.id} disconnected from chat service`);
         });
       });
     } catch (error) {
