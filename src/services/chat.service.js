@@ -118,9 +118,11 @@ class ChatService {
   }
 
   async isTyping({ io, data }) {
-    const { conversationID, userID } = data;
+    const { conversationID, userID, members } = data;
     try {
-      io.to(userID).emit(IS_TYPING + conversationID, userID);
+      members.forEach((member) => {
+        io.to(member._id.toString()).emit(IS_TYPING + conversationID, userID);
+      });
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -128,9 +130,11 @@ class ChatService {
   }
 
   async stopTyping({ io, data }) {
-    const { conversationID, userID } = data;
+    const { conversationID, userID, members } = data;
     try {
-      io.to(userID).emit(STOP_TYPING + conversationID, userID);
+      members.forEach((member) => {
+        io.to(member._id.toString()).emit(STOP_TYPING + conversationID, userID);
+      });
     } catch (error) {
       console.log(error);
       throw new Error(error);
