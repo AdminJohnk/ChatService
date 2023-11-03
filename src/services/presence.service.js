@@ -7,7 +7,7 @@ class PresenceService {
   activeArr = [];
   constructor(io) {
     try {
-      let presenceService = io.of('/presence-service');
+      const presenceService = io.of('/presence-service');
       setInterval(() => {
         console.log('Number of active users: ', this.activeArr.length);
       }, 5000);

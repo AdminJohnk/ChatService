@@ -10,6 +10,10 @@ const NEW_CONVERSATION = 'NEW_CONVERSATION';
 const IS_TYPING = 'IS_TYPING';
 const STOP_TYPING = 'STOP_TYPING';
 const LEAVE_GROUP = 'LEAVE_GROUP';
+const VIDEO_CALL = 'video';
+const VOICE_CALL = 'audio';
+const LEAVE_VIDEO_CALL = 'leave_video';
+const LEAVE_VOICE_CALL = 'leave_audio';
 
 class ChatService {
   constructor(io) {
@@ -52,6 +56,22 @@ class ChatService {
           data.members.forEach((member) => {
             chatService.to(member.toString()).emit(LEAVE_GROUP, data);
           });
+        });
+
+        socket.on(VIDEO_CALL, (data) => {
+          this.handleVideoCall({ io: chatService, data, socket });
+        });
+
+        socket.on(VOICE_CALL, (data) => {
+          this.handleVoiceCall({ io: chatService, data, socket });
+        });
+
+        socket.on(LEAVE_VIDEO_CALL, (data) => {
+          this.leaveVideoCall({ io: chatService, data, socket });
+        });
+
+        socket.on(LEAVE_VOICE_CALL, (data) => {
+          this.leaveVoiceCall({ io: chatService, data, socket });
         });
       });
     } catch (error) {
@@ -138,6 +158,56 @@ class ChatService {
     } catch (error) {
       console.log(error);
       throw new Error(error);
+    }
+  }
+
+  async handleVideoCall({ io, data, socket }) {
+    if (!data.conversation_id) return;
+
+    socket.join(data.conversation_id);
+    data.members.forEach((member) => {
+      io.to(member.toString()).except(data.user_id).emit(VIDEO_CALL, data);
+    });
+  }
+
+  async handleVoiceCall({ io, data, socket }) {
+    if (!data.conversation_id) return;
+
+    socket.join(data.conversation_id);
+    data.members.forEach((member) => {
+      io.to(member.toString()).except(data.user_id).emit(VOICE_CALL, data);
+    });
+  }
+
+  async leaveVideoCall({ io, data, socket }) {
+    if (!data.conversation_id) return;
+
+    console.log(io.adapter?.rooms?.get(data.conversation_id));
+
+    const room = io.adapter?.rooms?.get(data.conversation_id);
+
+    console.log(room);
+
+    if (room && room.has(socket.id)) {
+      socket.leave(data.conversation_id);
+
+      if (room.size === 0) {
+        console.log('room size: ', room.size);
+      }
+    }
+  }
+
+  async leaveVoiceCall({ io, data, socket }) {
+    if (!data.conversation_id) return;
+    console.log(io.adapter?.rooms?.get(data.conversation_id));
+    const room = io.adapter?.rooms?.get(data.conversation_id);
+
+    if (room && room.has(socket.id)) {
+      socket.leave(data.conversation_id);
+
+      if (room.size === 0) {
+        console.log('room size: ', room.size);
+      }
     }
   }
 }

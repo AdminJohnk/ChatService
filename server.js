@@ -22,7 +22,10 @@ new PresenceService(io);
 require('./src/database/init.mongodb');
 
 const PORT = process.env.PORT || 4056;
-
+io.on('connection', (socket) => {
+  // get room
+  const room = io.sockets.adapter.rooms.get('room');
+});
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
