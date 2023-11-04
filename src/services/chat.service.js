@@ -1,19 +1,22 @@
 const { MessageClass } = require('../models/message.model');
 const { ConversationClass } = require('../models/conversation.model');
-
-const SETUP = 'SETUP';
-const PRIVATE_MSG = 'PRIVATE_MSG';
-const SEEN_MSG = 'SEEN_MSG';
-const UNSEEN_MSG = 'UNSEEN_MSG';
-const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
-const NEW_CONVERSATION = 'NEW_CONVERSATION';
-const IS_TYPING = 'IS_TYPING';
-const STOP_TYPING = 'STOP_TYPING';
-const LEAVE_GROUP = 'LEAVE_GROUP';
-const VIDEO_CALL = 'video';
-const VOICE_CALL = 'audio';
-const LEAVE_VIDEO_CALL = 'leave_video';
-const LEAVE_VOICE_CALL = 'leave_audio';
+const {
+  SETUP,
+  PRIVATE_MSG,
+  SEEN_MSG,
+  UNSEEN_MSG,
+  NEW_CONVERSATION,
+  IS_TYPING,
+  STOP_TYPING,
+  LEAVE_GROUP,
+  VIDEO_CALL,
+  VOICE_CALL,
+  LEAVE_VIDEO_CALL,
+  LEAVE_VOICE_CALL,
+  PRIVATE_CONVERSATION,
+  END_VIDEO_CALL,
+  END_VOICE_CALL
+} = require('../utils/constants');
 
 class ChatService {
   constructor(io) {
@@ -165,6 +168,8 @@ class ChatService {
     if (!data.conversation_id) return;
 
     socket.join(data.conversation_id);
+    if (!data.first_call) return;
+
     data.members.forEach((member) => {
       io.to(member.toString()).except(data.user_id).emit(VIDEO_CALL, data);
     });
@@ -174,6 +179,8 @@ class ChatService {
     if (!data.conversation_id) return;
 
     socket.join(data.conversation_id);
+    if (!data.first_call) return;
+
     data.members.forEach((member) => {
       io.to(member.toString()).except(data.user_id).emit(VOICE_CALL, data);
     });
@@ -181,32 +188,26 @@ class ChatService {
 
   async leaveVideoCall({ io, data, socket }) {
     if (!data.conversation_id) return;
-
-    console.log(io.adapter?.rooms?.get(data.conversation_id));
-
     const room = io.adapter?.rooms?.get(data.conversation_id);
-
-    console.log(room);
 
     if (room && room.has(socket.id)) {
       socket.leave(data.conversation_id);
 
-      if (room.size === 0) {
-        console.log('room size: ', room.size);
+      if (room.size <= 1) {
+        io.emit(END_VIDEO_CALL, data);
       }
     }
   }
 
   async leaveVoiceCall({ io, data, socket }) {
     if (!data.conversation_id) return;
-    console.log(io.adapter?.rooms?.get(data.conversation_id));
     const room = io.adapter?.rooms?.get(data.conversation_id);
 
     if (room && room.has(socket.id)) {
       socket.leave(data.conversation_id);
 
-      if (room.size === 0) {
-        console.log('room size: ', room.size);
+      if (room.size <= 1) {
+        io.emit(END_VOICE_CALL, data);
       }
     }
   }

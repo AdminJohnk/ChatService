@@ -46,6 +46,22 @@ const objectConnectRedis = {
   }
 };
 
+const SETUP = 'SETUP';
+const PRIVATE_MSG = 'PRIVATE_MSG';
+const SEEN_MSG = 'SEEN_MSG';
+const UNSEEN_MSG = 'UNSEEN_MSG';
+const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
+const NEW_CONVERSATION = 'NEW_CONVERSATION';
+const IS_TYPING = 'IS_TYPING';
+const STOP_TYPING = 'STOP_TYPING';
+const LEAVE_GROUP = 'LEAVE_GROUP';
+const VIDEO_CALL = 'video';
+const VOICE_CALL = 'audio';
+const LEAVE_VIDEO_CALL = 'leave_video';
+const LEAVE_VOICE_CALL = 'leave_audio';
+const END_VIDEO_CALL = 'end_video';
+const END_VOICE_CALL = 'end_audio';
+
 module.exports = {
   HEADER,
   RoleUser,
@@ -54,5 +70,20 @@ module.exports = {
   pp_UserDefault,
   se_UserDefaultForPost,
   objectConnectRedis,
-  unSe_PostDefault
+  unSe_PostDefault,
+  SETUP,
+  PRIVATE_MSG,
+  SEEN_MSG,
+  UNSEEN_MSG,
+  PRIVATE_CONVERSATION,
+  NEW_CONVERSATION,
+  IS_TYPING,
+  STOP_TYPING,
+  LEAVE_GROUP,
+  VIDEO_CALL,
+  VOICE_CALL,
+  LEAVE_VIDEO_CALL,
+  LEAVE_VOICE_CALL,
+  END_VIDEO_CALL,
+  END_VOICE_CALL
 };
