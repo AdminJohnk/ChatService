@@ -86,10 +86,11 @@ class ChatService {
   async getPrivateMessage({ io, data }) {
     const { conversationID, message } = data;
     try {
-      const { sender, content, createdAt } = message;
+      const { sender, content, createdAt, type } = message;
       const newMessage = await MessageClass.createMessage({
         conversation_id: conversationID,
         sender: sender._id,
+        type,
         content,
         createdAt
       });
