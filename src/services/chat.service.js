@@ -176,7 +176,7 @@ class ChatService {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
       if (room && room.size <= 1) {
         io.emit(END_VIDEO_CALL, data);
-        io.to(data.author).emit(SEND_END_VIDEO_CALL, data);
+        io.to(data.author).emit(SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
@@ -193,7 +193,7 @@ class ChatService {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
       if (room && room.size <= 1) {
         io.emit(END_VOICE_CALL, data);
-        io.to(data.author).emit(SEND_END_VOICE_CALL, data);
+        io.to(data.author).emit(SEND_END_VOICE_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
@@ -210,7 +210,7 @@ class ChatService {
 
       if (room.size <= 1) {
         io.emit(END_VIDEO_CALL, data);
-        io.to(data.author).emit(SEND_END_VIDEO_CALL, data);
+        io.to(data.author).emit(SEND_END_VIDEO_CALL, { ...data, type: 'end' });
       }
     }
   }
@@ -224,7 +224,7 @@ class ChatService {
 
       if (room.size <= 1) {
         io.emit(END_VOICE_CALL, data);
-        io.to(data.author).emit(SEND_END_VOICE_CALL, data);
+        io.to(data.author).emit(SEND_END_VOICE_CALL, { ...data, type: 'end' });
       }
     }
   }
