@@ -208,7 +208,7 @@ class ChatService {
     if (room && room.has(socket.id)) {
       socket.leave(data.conversation_id + 'video');
 
-      if (room.size <= 1) {
+      if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(END_VIDEO_CALL, data);
         io.to(data.author).emit(SEND_END_VIDEO_CALL, { ...data, type: 'end' });
       }
@@ -222,7 +222,7 @@ class ChatService {
     if (room && room.has(socket.id)) {
       socket.leave(data.conversation_id + 'voice');
 
-      if (room.size <= 1) {
+      if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(END_VOICE_CALL, data);
         io.to(data.author).emit(SEND_END_VOICE_CALL, { ...data, type: 'end' });
       }
