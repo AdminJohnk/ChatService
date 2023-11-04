@@ -61,6 +61,8 @@ const LEAVE_VIDEO_CALL = 'leave_video';
 const LEAVE_VOICE_CALL = 'leave_audio';
 const END_VIDEO_CALL = 'end_video';
 const END_VOICE_CALL = 'end_audio';
+const SEND_END_VIDEO_CALL = 'send_end_video';
+const SEND_END_VOICE_CALL = 'send_end_audio';
 
 module.exports = {
   HEADER,
@@ -85,5 +87,7 @@ module.exports = {
   LEAVE_VIDEO_CALL,
   LEAVE_VOICE_CALL,
   END_VIDEO_CALL,
-  END_VOICE_CALL
+  END_VOICE_CALL,
+  SEND_END_VIDEO_CALL,
+  SEND_END_VOICE_CALL
 };

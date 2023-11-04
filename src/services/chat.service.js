@@ -15,7 +15,9 @@ const {
   LEAVE_VOICE_CALL,
   PRIVATE_CONVERSATION,
   END_VIDEO_CALL,
-  END_VOICE_CALL
+  END_VOICE_CALL,
+  SEND_END_VIDEO_CALL,
+  SEND_END_VOICE_CALL
 } = require('../utils/constants');
 
 class ChatService {
@@ -168,9 +170,15 @@ class ChatService {
   async handleVideoCall({ io, data, socket }) {
     if (!data.conversation_id) return;
 
-    socket.join(data.conversation_id);
+    socket.join(data.conversation_id + 'video');
     if (!data.first_call) return;
-
+    setTimeout(() => {
+      const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
+      if (room && room.size <= 1) {
+        io.emit(END_VIDEO_CALL, data);
+        io.to(data.author).emit(SEND_END_VIDEO_CALL, data);
+      }
+    }, 60000);
     data.members.forEach((member) => {
       io.to(member.toString()).except(data.user_id).emit(VIDEO_CALL, data);
     });
@@ -179,9 +187,15 @@ class ChatService {
   async handleVoiceCall({ io, data, socket }) {
     if (!data.conversation_id) return;
 
-    socket.join(data.conversation_id);
+    socket.join(data.conversation_id + 'voice');
     if (!data.first_call) return;
-
+    setTimeout(() => {
+      const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
+      if (room && room.size <= 1) {
+        io.emit(END_VOICE_CALL, data);
+        io.to(data.author).emit(SEND_END_VOICE_CALL, data);
+      }
+    }, 60000);
     data.members.forEach((member) => {
       io.to(member.toString()).except(data.user_id).emit(VOICE_CALL, data);
     });
@@ -189,26 +203,28 @@ class ChatService {
 
   async leaveVideoCall({ io, data, socket }) {
     if (!data.conversation_id) return;
-    const room = io.adapter?.rooms?.get(data.conversation_id);
+    const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
 
     if (room && room.has(socket.id)) {
-      socket.leave(data.conversation_id);
+      socket.leave(data.conversation_id + 'video');
 
       if (room.size <= 1) {
         io.emit(END_VIDEO_CALL, data);
+        io.to(data.author).emit(SEND_END_VIDEO_CALL, data);
       }
     }
   }
 
   async leaveVoiceCall({ io, data, socket }) {
     if (!data.conversation_id) return;
-    const room = io.adapter?.rooms?.get(data.conversation_id);
+    const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
 
     if (room && room.has(socket.id)) {
-      socket.leave(data.conversation_id);
+      socket.leave(data.conversation_id + 'voice');
 
       if (room.size <= 1) {
         io.emit(END_VOICE_CALL, data);
+        io.to(data.author).emit(SEND_END_VOICE_CALL, data);
       }
     }
   }
