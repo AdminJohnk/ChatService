@@ -205,8 +205,8 @@ class ChatService {
     if (!data.conversation_id) return;
     const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
 
-    if (room && room.has(socket.id)) {
-      socket.leave(data.conversation_id + 'video');
+    if (room) {
+      if (room.has(socket.id)) socket.leave(data.conversation_id + 'video');
 
       if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(END_VIDEO_CALL, data);
@@ -219,8 +219,8 @@ class ChatService {
     if (!data.conversation_id) return;
     const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
 
-    if (room && room.has(socket.id)) {
-      socket.leave(data.conversation_id + 'voice');
+    if (room) {
+      if (room.has(socket.id)) socket.leave(data.conversation_id + 'voice');
 
       if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(END_VOICE_CALL, data);
