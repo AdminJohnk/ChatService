@@ -46,23 +46,49 @@ const objectConnectRedis = {
   }
 };
 
-const SETUP = 'SETUP';
-const PRIVATE_MSG = 'PRIVATE_MSG';
-const SEEN_MSG = 'SEEN_MSG';
-const UNSEEN_MSG = 'UNSEEN_MSG';
-const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
-const NEW_CONVERSATION = 'NEW_CONVERSATION';
-const IS_TYPING = 'IS_TYPING';
-const STOP_TYPING = 'STOP_TYPING';
-const LEAVE_GROUP = 'LEAVE_GROUP';
-const VIDEO_CALL = 'video';
-const VOICE_CALL = 'audio';
-const LEAVE_VIDEO_CALL = 'leave_video';
-const LEAVE_VOICE_CALL = 'leave_audio';
-const END_VIDEO_CALL = 'end_video';
-const END_VOICE_CALL = 'end_audio';
-const SEND_END_VIDEO_CALL = 'send_end_video';
-const SEND_END_VOICE_CALL = 'send_end_audio';
+// const SETUP = 'SETUP';
+// const PRIVATE_MSG = 'PRIVATE_MSG';
+// const SEEN_MSG = 'SEEN_MSG';
+// const UNSEEN_MSG = 'UNSEEN_MSG';
+// const PRIVATE_CONVERSATION = 'PRIVATE_CONVERSATION';
+// const NEW_CONVERSATION = 'NEW_CONVERSATION';
+// const IS_TYPING = 'IS_TYPING';
+// const STOP_TYPING = 'STOP_TYPING';
+// const LEAVE_GROUP = 'LEAVE_GROUP';
+// const VIDEO_CALL = 'video';
+// const VOICE_CALL = 'audio';
+// const LEAVE_VIDEO_CALL = 'leave_video';
+// const LEAVE_VOICE_CALL = 'leave_audio';
+// const END_VIDEO_CALL = 'end_video';
+// const END_VOICE_CALL = 'end_audio';
+// const SEND_END_VIDEO_CALL = 'send_end_video';
+// const SEND_END_VOICE_CALL = 'send_end_audio';
+
+const SOCKET_EVENTS = {
+  SETUP: 'SETUP',
+  PRIVATE_MSG: 'PRIVATE_MSG',
+  SEEN_MSG: 'SEEN_MSG',
+  UNSEEN_MSG: 'UNSEEN_MSG',
+  PRIVATE_CONVERSATION: 'PRIVATE_CONVERSATION',
+  NEW_CONVERSATION: 'NEW_CONVERSATION',
+  IS_TYPING: 'IS_TYPING',
+  STOP_TYPING: 'STOP_TYPING',
+  LEAVE_GROUP: 'LEAVE_GROUP',
+  CHANGE_CONVERSATION_NAME: 'CHANGE_CONVERSATION_NAME',
+  CHANGE_CONVERSATION_IMAGE: 'CHANGE_CONVERSATION_IMAGE',
+  ADD_MEMBER: 'ADD_MEMBER',
+  REMOVE_MEMBER: 'REMOVE_MEMBER',
+  COMMISSION_ADMIN: 'COMMISSION_ADMIN',
+  DECOMMISSION_ADMIN: 'DECOMMISSION_ADMIN',
+  VIDEO_CALL: 'video',
+  VOICE_CALL: 'audio',
+  LEAVE_VIDEO_CALL: 'leave_video',
+  LEAVE_VOICE_CALL: 'leave_audio',
+  END_VIDEO_CALL: 'end_video',
+  END_VOICE_CALL: 'end_audio',
+  SEND_END_VIDEO_CALL: 'send_end_video',
+  SEND_END_VOICE_CALL: 'send_end_audio'
+};
 
 module.exports = {
   HEADER,
@@ -73,21 +99,5 @@ module.exports = {
   se_UserDefaultForPost,
   objectConnectRedis,
   unSe_PostDefault,
-  SETUP,
-  PRIVATE_MSG,
-  SEEN_MSG,
-  UNSEEN_MSG,
-  PRIVATE_CONVERSATION,
-  NEW_CONVERSATION,
-  IS_TYPING,
-  STOP_TYPING,
-  LEAVE_GROUP,
-  VIDEO_CALL,
-  VOICE_CALL,
-  LEAVE_VIDEO_CALL,
-  LEAVE_VOICE_CALL,
-  END_VIDEO_CALL,
-  END_VOICE_CALL,
-  SEND_END_VIDEO_CALL,
-  SEND_END_VOICE_CALL
+  SOCKET_EVENTS
 };
