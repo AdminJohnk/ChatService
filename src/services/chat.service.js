@@ -255,7 +255,7 @@ class ChatService {
     const { members } = data;
 
     members.forEach((member) => {
-      io.to(member._id.toString()).emit(SOCKET_EVENTS.NEW_CONVERSATION, data);
+      io.to(member._id.toString()).emit(SOCKET_EVENTS.ADD_MEMBER, data);
     });
   }
 
@@ -263,7 +263,7 @@ class ChatService {
     const { members } = data;
 
     members.forEach((member) => {
-      io.to(member._id.toString()).emit(SOCKET_EVENTS.LEAVE_GROUP, data);
+      io.to(member._id.toString()).emit(SOCKET_EVENTS.REMOVE_MEMBER, data);
     });
   }
 

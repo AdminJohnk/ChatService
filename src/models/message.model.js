@@ -14,6 +14,7 @@ const MessageSchema = new Schema(
       enum: ['text', 'notification', 'audio', 'file', 'voice', 'video'],
       default: 'text'
     },
+    image: String,
     sender: { type: ObjectId, ref: 'User', required: true },
     content: { type: String, required: true },
     createdAt: { type: Date, required: true }
