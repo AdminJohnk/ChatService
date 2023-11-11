@@ -41,7 +41,7 @@ class ChatService {
 
         socket.on(SOCKET_EVENTS.LEAVE_GROUP, (data) => {
           data.members.forEach((member) => {
-            chatService.to(member.toString()).emit(LEAVE_GROUP, data);
+            chatService.to(member._id.toString()).emit(SOCKET_EVENTS.LEAVE_GROUP, data);
           });
         });
 
@@ -260,11 +260,12 @@ class ChatService {
   }
 
   async removeMemberFromConversation({ io, data }) {
-    const { members } = data;
+    const { members, remove_userID } = data;
 
     members.forEach((member) => {
       io.to(member._id.toString()).emit(SOCKET_EVENTS.REMOVE_MEMBER, data);
     });
+    io.to(remove_userID.toString()).emit(SOCKET_EVENTS.REMOVE_MEMBER, data);
   }
 
   async commissionAdmin({ io, data }) {
