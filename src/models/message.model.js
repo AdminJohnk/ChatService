@@ -6,9 +6,9 @@ const ObjectId = Types.ObjectId;
 const DOCUMENT_NAME = 'Message';
 const COLLECTION_NAME = 'messages';
 
-var MessageSchema = new Schema(
+const MessageSchema = new Schema(
   {
-    conversation_id: { type: ObjectId, ref: 'Conversation', required: true },
+    conversation_id: { type: ObjectId, ref: 'Conversation', required: true},
     type: {
       type: String,
       enum: ['text', 'notification', 'audio', 'file', 'voice', 'video'],
@@ -22,6 +22,8 @@ var MessageSchema = new Schema(
     collection: COLLECTION_NAME
   }
 );
+
+MessageSchema.index({ conversation_id: 1, createdAt: -1 });
 
 const MessageModel = model(DOCUMENT_NAME, MessageSchema);
 

@@ -7,9 +7,9 @@ const ObjectId = Types.ObjectId;
 const DOCUMENT_NAME = 'User';
 const COLLECTION_NAME = 'users';
 
-var UserSchema = new Schema(
+const UserSchema = new Schema(
   {
-    id_incr: { type: Number, default: 0 },
+    id_incr: { type: Number, default: 0, index: true },
     name: {
       type: String,
       trim: true,
@@ -22,7 +22,7 @@ var UserSchema = new Schema(
       trim: true,
       required: true
     },
-    password: { type: String, required: true },
+    password: { type: String },
     role: Array,
     last_online: { type: Date, default: Date.now },
 
@@ -84,14 +84,8 @@ var UserSchema = new Schema(
   }
 );
 
-// Xóa trường _id và thay thế bằng id khi dùng find, findOne, ... trả về
-// UserSchema.set('toJSON', {
-//   virtuals: true,
-//   transform: function (doc, ret) {
-//     delete ret._id;
-//     delete ret.__v;
-//   }
-// });
+// create index for search
+UserSchema.index({ name: 'text', email: 'text', alias: 'text' });
 
 const UserModel = model(DOCUMENT_NAME, UserSchema);
 

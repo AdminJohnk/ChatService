@@ -22,13 +22,16 @@ const ConversationSchema = new Schema(
     // group
     admins: { type: [ObjectId], ref: 'User', default: [] },
     name: String,
-    image: String
+    image: String,
+    cover_image: String
   },
   {
     timestamps: true,
     collection: COLLECTION_NAME
   }
 );
+
+ConversationSchema.index({ members: 1, updatedAt: -1 });
 
 const ConversationModel = model(DOCUMENT_NAME, ConversationSchema);
 
