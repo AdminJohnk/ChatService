@@ -218,11 +218,25 @@ class ChatService {
     const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
 
     if (room) {
-      if (room.has(socket.id)) socket.leave(data.conversation_id + 'video');
-
-      if (room.size <= 1 && (data.type !== 'missed' || !data.type)) {
-        io.emit(SOCKET_EVENTS.END_VIDEO_CALL, data);
-        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'ended' });
+      if (room.has(socket.id)) {
+        socket.leave(data.conversation_id + 'video');
+        if (room.size === 1) {
+          io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'ended' });
+          io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'ended' });
+        } else if (room.size === 0) {
+          io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'missed' });
+          io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
+        }
+      } else {
+        if (room.size <= 1) {
+          if (data.type === 'missed') {
+            io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'missed' });
+            io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
+          } else {
+            io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'ended' });
+            io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'ended' });
+          }
+        }
       }
     }
   }
@@ -232,11 +246,25 @@ class ChatService {
     const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
 
     if (room) {
-      if (room.has(socket.id)) socket.leave(data.conversation_id + 'voice');
-
-      if (room.size <= 1 && (data.type !== 'missed' || !data.type)) {
-        io.emit(SOCKET_EVENTS.END_VOICE_CALL, data);
-        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'ended' });
+      if (room.has(socket.id)) {
+        socket.leave(data.conversation_id + 'voice');
+        if (room.size === 1) {
+          io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'ended' });
+          io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'ended' });
+        } else if (room.size === 0) {
+          io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'missed' });
+          io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'missed' });
+        }
+      } else {
+        if (room.size <= 1) {
+          if (data.type === 'missed') {
+            io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'missed' });
+            io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'missed' });
+          } else {
+            io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'ended' });
+            io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'ended' });
+          }
+        }
       }
     }
   }
