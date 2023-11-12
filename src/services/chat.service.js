@@ -27,7 +27,7 @@ class ChatService {
 
         socket.on(SOCKET_EVENTS.NEW_CONVERSATION, (data) => {
           data.members.forEach((member) => {
-            chatService.to(member.toString()).emit(SOCKET_EVENTS.PRIVATE_CONVERSATION, data);
+            chatService.to(member._id.toString()).emit(SOCKET_EVENTS.PRIVATE_CONVERSATION, data);
           });
         });
 
@@ -47,7 +47,7 @@ class ChatService {
 
         socket.on(SOCKET_EVENTS.DISSOLVE_GROUP, (data) => {
           data.members.forEach((member) => {
-            chatService.to(member._id.toString()).emit(SOCKET_EVENTS.DISSOLVE_GROUP, data);
+            chatService.to(member.toString()).emit(SOCKET_EVENTS.DISSOLVE_GROUP, data);
           });
         });
 
