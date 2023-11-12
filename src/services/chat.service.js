@@ -45,6 +45,12 @@ class ChatService {
           });
         });
 
+        socket.on(SOCKET_EVENTS.DISSOLVE_GROUP, (data) => {
+          data.members.forEach((member) => {
+            chatService.to(member._id.toString()).emit(SOCKET_EVENTS.DISSOLVE_GROUP, data);
+          });
+        });
+
         socket.on(SOCKET_EVENTS.CHANGE_CONVERSATION_IMAGE, (data) => {
           this.changeConversationImage({ io: chatService, data });
         });
