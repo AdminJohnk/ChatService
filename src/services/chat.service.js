@@ -181,12 +181,12 @@ class ChatService {
     setTimeout(() => {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
       if (room && room.size <= 1) {
-        io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'missed' });
+        io.emit(SOCKET_EVENTS.END_VIDEO_CALL);
         io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
-      io.to(member.toString()).except(data.user_id).emit(SOCKET_EVENTS.VIDEO_CALL, data);
+      io.to(member.toString()).except(data.author._id).emit(SOCKET_EVENTS.VIDEO_CALL, data);
     });
   }
 
@@ -198,12 +198,12 @@ class ChatService {
     setTimeout(() => {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
       if (room && room.size <= 1) {
-        io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'missed' });
+        io.emit(SOCKET_EVENTS.END_VOICE_CALL);
         io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
-      io.to(member.toString()).except(data.user_id).emit(SOCKET_EVENTS.VOICE_CALL, data);
+      io.to(member.toString()).except(data.author._id).emit(SOCKET_EVENTS.VOICE_CALL, data);
     });
   }
 
@@ -214,7 +214,7 @@ class ChatService {
     if (room) {
       if (room.has(socket.id)) socket.leave(data.conversation_id + 'video');
 
-      if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
+      if (room.size <= 1 && (data.type !== 'missed' || !data.type)) {
         io.emit(SOCKET_EVENTS.END_VIDEO_CALL, data);
         io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'ended' });
       }
@@ -228,7 +228,7 @@ class ChatService {
     if (room) {
       if (room.has(socket.id)) socket.leave(data.conversation_id + 'voice');
 
-      if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
+      if (room.size <= 1 && (data.type !== 'missed' || !data.type)) {
         io.emit(SOCKET_EVENTS.END_VOICE_CALL, data);
         io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'ended' });
       }
