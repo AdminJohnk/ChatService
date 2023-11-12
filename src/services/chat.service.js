@@ -182,7 +182,7 @@ class ChatService {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'video');
       if (room && room.size <= 1) {
         io.emit(SOCKET_EVENTS.END_VIDEO_CALL, { ...data, type: 'missed' });
-        io.to(data.author).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
+        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
@@ -199,7 +199,7 @@ class ChatService {
       const room = io.adapter?.rooms?.get(data.conversation_id + 'voice');
       if (room && room.size <= 1) {
         io.emit(SOCKET_EVENTS.END_VOICE_CALL, { ...data, type: 'missed' });
-        io.to(data.author).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'missed' });
+        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'missed' });
       }
     }, 60000);
     data.members.forEach((member) => {
@@ -216,7 +216,7 @@ class ChatService {
 
       if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(SOCKET_EVENTS.END_VIDEO_CALL, data);
-        io.to(data.author).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'end' });
+        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VIDEO_CALL, { ...data, type: 'ended' });
       }
     }
   }
@@ -230,7 +230,7 @@ class ChatService {
 
       if (room.size <= 1 && (!data.type === 'missed' || !data.type)) {
         io.emit(SOCKET_EVENTS.END_VOICE_CALL, data);
-        io.to(data.author).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'end' });
+        io.to(data.author._id).emit(SOCKET_EVENTS.SEND_END_VOICE_CALL, { ...data, type: 'ended' });
       }
     }
   }
