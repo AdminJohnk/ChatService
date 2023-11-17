@@ -16,7 +16,7 @@ const MessageSchema = new Schema(
     },
     images: { type: [String], default: null },
     sender: { type: ObjectId, ref: 'User', required: true },
-    content: { type: String, required: true },
+    content: { type: String, default: null },
     createdAt: { type: Date, required: true }
   },
   {
