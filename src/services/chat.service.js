@@ -14,7 +14,7 @@ class ChatService {
         });
 
         socket.on(SOCKET_EVENTS.PRIVATE_MSG, (data) => {
-          this.getPrivateMessage({ io: chatService, data });
+          this.sendPrivateMessage({ io: chatService, data });
         });
 
         socket.on(SOCKET_EVENTS.SEEN_MSG, (data) => {
@@ -97,14 +97,15 @@ class ChatService {
     }
   }
 
-  async getPrivateMessage({ io, data }) {
+  async sendPrivateMessage({ io, data }) {
     const { conversationID, message } = data;
     try {
-      const { sender, content, createdAt, type } = message;
+      const { sender, content, createdAt, type, images } = message;
       const newMessage = await MessageClass.createMessage({
         conversation_id: conversationID,
         sender: sender._id,
         type,
+        images,
         content,
         createdAt
       });
