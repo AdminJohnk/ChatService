@@ -11,7 +11,7 @@ const MessageSchema = new Schema(
     conversation_id: { type: ObjectId, ref: 'Conversation', required: true },
     type: {
       type: String,
-      enum: ['text', 'notification', 'audio', 'file', 'voice', 'video'],
+      enum: ['text', 'image', 'notification', 'audio', 'file', 'voice', 'video'],
       default: 'text'
     },
     images: { type: [String], default: null },
